@@ -60,6 +60,44 @@
 	/* ── 5. Active nav highlight ── */
 	const sections = document.querySelectorAll("main section[id]");
 	const navLinks = document.querySelectorAll("nav a[href^='#']");
+	const pageHeader = document.querySelector("header");
+	const navToggle = document.querySelector(".nav-toggle");
+
+	function closeMobileNav() {
+		if (!pageHeader || !navToggle) return;
+		pageHeader.classList.remove("nav-open");
+		document.body.classList.remove("nav-open-mobile");
+		navToggle.setAttribute("aria-expanded", "false");
+	}
+
+	if (pageHeader && navToggle) {
+		navToggle.addEventListener("click", () => {
+			const isOpen = pageHeader.classList.toggle("nav-open");
+			document.body.classList.toggle("nav-open-mobile", isOpen);
+			navToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+		});
+
+		document.addEventListener("click", (event) => {
+			if (!pageHeader.classList.contains("nav-open")) return;
+			if (event.target instanceof Element && !event.target.closest("header")) {
+				closeMobileNav();
+			}
+		});
+
+		window.addEventListener("resize", () => {
+			if (window.innerWidth > 700) closeMobileNav();
+		});
+
+		document.addEventListener("keydown", (event) => {
+			if (event.key === "Escape") closeMobileNav();
+		});
+	}
+
+	navLinks.forEach((link) => {
+		link.addEventListener("click", () => {
+			if (window.innerWidth <= 700) closeMobileNav();
+		});
+	});
 
 	const navObserver = new IntersectionObserver(
 		(entries) => {

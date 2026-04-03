@@ -110,6 +110,35 @@ nav a:focus-visible {
 	outline: none;
 }
 
+.nav-toggle {
+	display: none;
+	width: 44px;
+	height: 44px;
+	padding: 0.5rem;
+	border-radius: 10px;
+	border: 1px solid var(--line);
+	background: rgba(14, 215, 255, 0.08);
+	cursor: pointer;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 0.24rem;
+	z-index: 91;
+}
+
+.nav-toggle-line {
+	display: block;
+	width: 18px;
+	height: 2px;
+	background: var(--text-main);
+	border-radius: 2px;
+	transition: transform 0.22s ease, opacity 0.22s ease;
+}
+
+header.nav-open .nav-toggle-line:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+header.nav-open .nav-toggle-line:nth-child(2) { opacity: 0; }
+header.nav-open .nav-toggle-line:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
 /* ── Hero ── */
 .hero {
 	min-height: 100vh;
@@ -1058,8 +1087,70 @@ nav a.active {
 }
 
 @media (max-width: 700px) {
-	.nav-wrap { flex-direction: column; align-items: flex-start; }
-	nav { justify-content: flex-start; }
+	.nav-wrap {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.nav-toggle { display: inline-flex; }
+
+	nav {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: min(84vw, 320px);
+		display: grid;
+		grid-template-columns: 1fr;
+		align-content: start;
+		gap: 0.6rem;
+		padding: 5.3rem 1rem 1rem;
+		background: rgba(2, 11, 22, 0.98);
+		border-left: 1px solid var(--line);
+		box-shadow: -16px 0 40px rgba(0, 0, 0, 0.42);
+		backdrop-filter: blur(12px);
+		opacity: 0;
+		visibility: hidden;
+		pointer-events: none;
+		transform: translateX(110%);
+		transition: opacity 0.28s ease, transform 0.32s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.28s ease;
+		z-index: 90;
+	}
+
+	header.nav-open nav {
+		opacity: 1;
+		visibility: visible;
+		pointer-events: auto;
+		transform: translateX(0);
+	}
+
+	body.nav-open-mobile {
+		overflow: hidden;
+	}
+
+	body.nav-open-mobile::after {
+		content: "";
+		position: fixed;
+		inset: 0;
+		background: rgba(1, 7, 15, 0.62);
+		backdrop-filter: blur(2px);
+		z-index: 80;
+	}
+
+	nav a {
+		text-align: left;
+		padding: 0.7rem 0.85rem;
+		font-size: 1rem;
+		border-radius: 10px;
+		border: 1px solid rgba(126, 219, 255, 0.18);
+		background: rgba(14, 215, 255, 0.04);
+	}
+
+	nav a.active {
+		border-color: var(--electric);
+		background: rgba(14, 215, 255, 0.14);
+	}
 
 	.why-grid { grid-template-columns: 1fr 1fr; }
 
